@@ -6,4 +6,6 @@ It parses the itinerary PDF and using signal words extracts all events, displays
 
 ![Image](example.jpg)
 
+Download compiled release version here: https://github.com/znueni/BTA2Outlook/releases/download/Release/BTAPDF2Outlook.zip
+
 Relies on the iText and bouncycastle libraries (https://github.com/itext/itextsharp and https://www.bouncycastle.org/csharp/index.html) for parsing PDF 
