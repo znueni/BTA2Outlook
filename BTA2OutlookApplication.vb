@@ -248,12 +248,15 @@ Public Class BTA2OutlookApplication
 
                     ElseIf TypeOf li.Tag Is ITNCar Then
                         Dim c As ITNCar = li.Tag
-                        Cal.Subject = c.EventType.ToString() & " - " & c.Name
+                        Cal.Subject = c.EventType.ToString() & " - " & c.Name & " (" & c.DateStart.ToShortTimeString() & ")"
                         Cal.Location = c.Location
                         Cal.BusyStatus = Outlook.OlBusyStatus.olOutOfOffice
                         Cal.Start = c.DateStart
                         Cal.End = c.DateStart.AddMinutes(30)
                         Cal.AllDayEvent = False
+                        Cal.ReminderOverrideDefault = True
+                        Cal.ReminderMinutesBeforeStart = 10
+                        Cal.ReminderPlaySound = True
 
                     End If
                     Cal.Save()
@@ -319,11 +322,11 @@ Public Class BTA2OutlookApplication
                 ElseIf TypeOf li.Tag Is ITNCar Then
                     Dim c As ITNCar = li.Tag
                     icses.Add(New ICSEvent() With {
-                       .subject = c.EventType.ToString() & " - " & c.Name,
+                       .subject = c.EventType.ToString() & " - " & c.Name & " (" & c.DateStart.ToShortTimeString() & ")",
                        .location = c.Location,
                        .dtStart = c.DateStart,
                        .dtEnd = c.DateStart.AddMinutes(30),
-                       .Reminder = True, .ReminderMinutesBeforeEvent = 30,
+                       .Reminder = True, .ReminderMinutesBeforeEvent = 10,
                        .Busy = ICSEvent.BusyStatusTypes.OOF,
                        .IsAllDay = False, .IsTransparent = False
                    })
@@ -424,7 +427,6 @@ Public Class ITNHotel
         End Get
     End Property
 End Class
-
 Public Class ITNCar
     Inherits ITNEvent
     Public Location As String, EventType As CarEventType, Name As String
@@ -433,7 +435,7 @@ Public Class ITNCar
         Dropoff
     End Enum
     Public Overrides Function Listviewitem() As ListViewItem
-        Return New ListViewItem(New String() {DateStart.ToString, DateEnd.ToString, $"{Name} {EventType.ToString()} in {Location}", ""})
+        Return New ListViewItem(New String() {DateStart.ToString, "", $"{Name} {EventType.ToString()} in {Location}", ""})
     End Function
 End Class
 
